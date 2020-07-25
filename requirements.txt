@@ -1,0 +1,3 @@
+httpx
+rich>=4.0.0
+imgmaker>=0.2.0
