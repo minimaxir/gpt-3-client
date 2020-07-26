@@ -114,10 +114,11 @@ class GPT3Client:
 
         # Save the generated text to a plain-text file
         # The file name will always be same for a given prompt and temperature
-        file_name = hashlib.sha256(bytes(prompt, "utf-8")).hexdigest()[0:8]
+        prompt_hash = hashlib.sha256(bytes(prompt, "utf-8")).hexdigest()[0:8]
         temp_string = str(temperature).replace(".", "_")
+        txt_file_name = f"txt_output/{prompt_hash}__{temp_string}.txt"
 
-        with open(f"{file_name}__{temp_string}.txt", "a", encoding="utf-8") as f:
+        with open(txt_file_name, "a", encoding="utf-8") as f:
             f.write(plain_text + "\n" + "=" * 20 + "\n")
 
         console.line()
