@@ -9,7 +9,7 @@
     />
     <script
       defer
-      src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"
+      src="https://cdnjs.cloudflare.com/ajax/libs/textfit/2.4.0/textFit.min.js"
     ></script>
   </head>
 
@@ -17,13 +17,10 @@
     @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&display=swap');
 
     body {
-      height: 100vh;
+      width: 450px;
+      height: 600px;
       display: flex;
       font-family: 'Source Sans Pro', sans-serif !important;
-    }
-
-    pre, .notification {
-      background-color: rgb(31, 36, 40) !important;
     }
 
     section {
@@ -40,41 +37,9 @@
       background-color: {{ accent or 'rgb(0, 0, 0)'}};
     }
 
-    strong,
-    i,
-    svg {
-      color: white !important;
-      font-weight: 900;
-    }
-
-    em {
-      color: white !important;
-      text-shadow: 2px 2px black;
-    }
-
     pre, span {
       color: white !important;
       font-family: 'Source Sans Pro', sans-serif !important;
-    }
-
-    .level div {
-      padding: 1em;
-    }
-
-    .level-left {
-      padding-left: 2em !important;
-    }
-
-    .level-right {
-      padding-right: 2em !important;
-    }
-
-    i,
-    svg,
-    strong,
-    em {
-      margin-left: 0.5em;
-      margin-right: 0.1em;
     }
 
     .brand {
@@ -91,4 +56,10 @@
       </div>
     </section>
   </body>
+
+  <script type="text/javascript">
+    window.addEventListener("load", function () {
+      textFit(document.getElementsByClassName("section"));
+    });
+  </script>
 </html>
