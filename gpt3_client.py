@@ -38,6 +38,8 @@ class GPT3Client:
         temperature: float = 0.7,
         max_tokens: int = 32,
         model: str = "davinci",
+        bg: tuple = (31, 36, 40),
+        accent: tuple = (0, 64, 0),
     ):
 
         data = {
@@ -73,7 +75,9 @@ class GPT3Client:
                     token, log_prob = list(token_dict.items())[0]
 
                     console.clear()
-                    gen_text.append(token, style=f"on {self.derive_token_bg(log_prob)}")
+                    gen_text.append(
+                        token, style=f"on {self.derive_token_bg(log_prob, bg, accent)}"
+                    )
                     console.print(gen_text)
 
         console.clear()
@@ -83,15 +87,13 @@ class GPT3Client:
         console_final.print(gen_text)
         console_final.save_html("test.html", inline_styles=True)
 
-    def derive_token_bg(
-        self, log_prob: float, bg: tuple = (31, 36, 40), target: tuple = (0, 128, 0)
-    ):
+    def derive_token_bg(self, log_prob: float, bg: tuple, accent: tuple):
         prob = exp(log_prob)
 
         color = (
-            int(max(bg[0] + target[0] * prob, bg[0])),
-            int(max(bg[1] + target[1] * prob, bg[1])),
-            int(max(bg[2] + target[2] * prob, bg[2])),
+            int(max(bg[0] + accent[0] * prob, bg[0])),
+            int(max(bg[1] + accent[1] * prob, bg[1])),
+            int(max(bg[2] + accent[2] * prob, bg[2])),
         )
 
         return f"rgb({min(color[0], 255)},{min(color[1], 255)},{min(color[2], 255)})"
