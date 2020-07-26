@@ -55,7 +55,6 @@ class GPT3Client:
         }
 
         console = Console(record=True)
-        console.clear()
 
         prompt_text = Text(prompt, style="bold", end="")
         console.print(prompt_text, end="")

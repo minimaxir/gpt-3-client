@@ -1,6 +1,8 @@
 from gpt3_client import GPT3Client
 import fire
 from rich.prompt import Prompt, Confirm
+from rich import print
+from rich.text import Text
 
 
 def gpt3_app(
@@ -14,10 +16,15 @@ def gpt3_app(
     interactive=False,
 ):
 
+    # divider_color_str = f"rgb({accent[0]},{accent[1]},{accent[2]})"
+    divider_color_str = "white"
+    divider = Text("\n" + "-" * 10 + "\n\n", style=divider_color_str)
     gpt3 = GPT3Client(image=image)
 
     if interactive:
         prompt = Prompt.ask("Enter a prompt for the GPT-3 API")
+
+    print(divider)
 
     gpt3.generate(
         prompt=prompt,
@@ -28,13 +35,18 @@ def gpt3_app(
         accent=accent,
     )
 
+    print(divider)
+
     if interactive:
         continue_gen = True
         while continue_gen:
             continue_gen = Confirm.ask(
-                "Do you wish to continue generating from the same prompt?"
+                "[i]Do you wish to continue generating from the same prompt?[/i]"
             )
+
             if continue_gen:
+                print(divider)
+
                 gpt3.generate(
                     prompt=prompt,
                     temperature=temperature,
@@ -43,6 +55,8 @@ def gpt3_app(
                     bg=bg,
                     accent=accent,
                 )
+
+                print(divider)
 
 
 if __name__ == "__main__":
