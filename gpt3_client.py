@@ -6,6 +6,7 @@ import logging
 from math import exp
 from rich.console import Console
 from rich.text import Text
+from rich import print
 import codecs
 
 logger = logging.getLogger("GPT3Client")
@@ -53,12 +54,11 @@ class GPT3Client:
             "logprobs": 1,
         }
 
-        console = Console()
+        console = Console(record=True)
         console.clear()
-        gen_text = Text()
 
-        gen_text.append(prompt, style="bold")
-        console.print(gen_text)
+        prompt_text = Text(prompt, style="bold", end="")
+        console.print(prompt_text, end="")
 
         with httpx.stream(
             "POST",
@@ -97,19 +97,15 @@ class GPT3Client:
                                 "utf-8"
                             )
                             temp_token = None
-                        console.clear()
-                        gen_text.append(
+                        text = Text(
                             token,
                             style=f"on {self.derive_token_bg(log_prob, bg, accent)}",
+                            end="\n" if token == "\n" else "",
                         )
-                        console.print(gen_text)
+                        console.print(text, end="")
 
-        console.clear()
-
-        # Create a new console to print and save the final generation.
-        console_final = Console(record=True)
-        console_final.print(gen_text)
-        console_final.save_html("test.html", inline_styles=True)
+        console.line()
+        console.save_html("test.html", inline_styles=True)
 
     def derive_token_bg(self, log_prob: float, bg: tuple, accent: tuple):
         prob = exp(log_prob)
