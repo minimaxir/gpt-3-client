@@ -72,13 +72,8 @@ class GPT3Client:
                 for token_dict in tokens:
                     token, log_prob = list(token_dict.items())[0]
 
-                    if exp(log_prob) > 0.5:
-                        color = "green"
-                    else:
-                        color = "red"
-
                     console.clear()
-                    gen_text.append(token, style=f"on {color}")
+                    gen_text.append(token, style=f"on {self.derive_token_bg(log_prob)}")
                     console.print(gen_text)
 
         console.clear()
@@ -87,3 +82,16 @@ class GPT3Client:
         console_final = Console(record=True)
         console_final.print(gen_text)
         console_final.save_html("test.html", inline_styles=True)
+
+    def derive_token_bg(
+        self, log_prob: float, bg: tuple = (31, 36, 40), target: tuple = (0, 128, 0)
+    ):
+        prob = exp(log_prob)
+
+        color = (
+            int(max(bg[0] + target[0] * prob, bg[0])),
+            int(max(bg[1] + target[1] * prob, bg[1])),
+            int(max(bg[2] + target[2] * prob, bg[2])),
+        )
+
+        return f"rgb({min(color[0], 255)},{min(color[1], 255)},{min(color[2], 255)})"
