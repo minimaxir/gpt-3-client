@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=2" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"
+    />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"
+    ></script>
+  </head>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700;900&display=swap');
+
+    body {
+      height: 100vh;
+      display: flex;
+      font-family: 'Source Sans Pro', sans-serif !important;
+    }
+
+    pre, .notification {
+      background-color: rgb(31, 36, 40) !important;
+    }
+
+    section {
+      /* margin-top: auto !important; */
+      /* align-self: flex-end; */
+      width: 100%;
+      background-color: rgb(31, 36, 40) !important;
+    }
+
+    .level {
+      width: 100%;
+      color: white !important;
+      font-weight: 400;
+      background-color: {{ accent or 'rgb(0, 0, 0)'}};
+    }
+
+    strong,
+    i,
+    svg {
+      color: white !important;
+      font-weight: 900;
+    }
+
+    em {
+      color: white !important;
+      text-shadow: 2px 2px black;
+    }
+
+    pre, span {
+      color: white !important;
+      font-family: 'Source Sans Pro', sans-serif !important;
+    }
+
+    .level div {
+      padding: 1em;
+    }
+
+    .level-left {
+      padding-left: 2em !important;
+    }
+
+    .level-right {
+      padding-right: 2em !important;
+    }
+
+    i,
+    svg,
+    strong,
+    em {
+      margin-left: 0.5em;
+      margin-right: 0.1em;
+    }
+
+    .brand {
+      font-size: 1.5em;
+    }
+
+    {{ custom_css or '' }}
+  </style>
+
+  <body>
+    <section class="section">
+      <div class="container">
+        {{ html | safe }}
+      </div>
+    </section>
+  </body>
+</html>
