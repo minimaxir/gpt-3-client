@@ -6,7 +6,7 @@ from rich.prompt import Prompt, Confirm
 def gpt3_app(
     image=False,
     prompt="Once upon a time",
-    temperature=0,
+    temperature: float = 0.0,
     max_tokens=32,
     stop="",
     bg: tuple = (31, 36, 40),

@@ -67,14 +67,18 @@ class GPT3Client:
             timeout=None,
         ) as r:
             for chunk in r.iter_text():
+                # print(chunk)
                 text = chunk[6:]  # JSON chunks are prepended with "data: "
                 if len(text) < 10 and "[DONE]" in text:
                     break
 
                 # tokens is a list of 1-element dicts
-                tokens = json.loads(text)["choices"][0]["logprobs"]["top_logprobs"]
-                for token_dict in tokens:
-                    token, log_prob = list(token_dict.items())[0]
+                logprobs = json.loads(text)["choices"][0]["logprobs"]
+                tokens = logprobs["tokens"]
+                token_logprobs = logprobs["token_logprobs"]
+                for i in range(len(tokens)):
+                    token = tokens[i]
+                    log_prob = token_logprobs[i]
 
                     console.clear()
                     gen_text.append(
