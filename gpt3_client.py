@@ -6,6 +6,7 @@ import logging
 from math import exp
 from rich.console import Console
 from rich.text import Text
+import codecs
 
 logger = logging.getLogger("GPT3Client")
 logger.setLevel(logging.INFO)
@@ -80,15 +81,21 @@ class GPT3Client:
                     token = tokens[i]
                     log_prob = token_logprobs[i]
 
-                    if token.startswith("bytes:"):
-                        # We need to hold the token to the next one
+                    if token.startswith("bytes:") and not temp_token:
+                        # We need to hold the 2-byte token to the next 1-byte token
                         # to get the full bytestring to decode
-
-                        # token = token[6:].encode("latin-1").decode()
+                        #
+                        # The API-returned tokens are in the form:
+                        # "bytes:\xe2\x80" and "bytes:\x9d"
                         temp_token = token[6:]
                     else:
                         if temp_token:
-                            token = (token[6:] + temp_token).encode("latin-1").decode()
+                            bytestring = temp_token + token[6:]
+
+                            # https://stackoverflow.com/a/37059682/9314418
+                            token = codecs.escape_decode(bytestring, "utf-8")[0].decode(
+                                "utf-8"
+                            )
                             temp_token = None
                         console.clear()
                         gen_text.append(
