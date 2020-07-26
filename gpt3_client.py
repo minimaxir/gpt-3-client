@@ -1,8 +1,6 @@
-import yaml
 import json
 import os
 import httpx
-import time
 import imgmaker
 import logging
 
@@ -11,7 +9,7 @@ logger.setLevel(logging.INFO)
 
 
 class GPT3Client:
-    def __init__(self):
+    def __init__(self, image: bool = True):
 
         assert os.getenv(
             "OPENAI_API_SECRET_KEY"
@@ -22,32 +20,40 @@ class GPT3Client:
             "Authorization": f"Bearer {os.getenv('OPENAI_API_SECRET_KEY')}",
         }
 
-        try:
-            self.imgmaker = imgmaker()
-        except ImportError:
-            logging.warn(
-                "imgmaker failed to load Chrome: you will not be able to generate images."
-            )
-            self.imgmaker = None
+        self.imgmaker = None
+        if image:
+            try:
+                self.imgmaker = imgmaker()
+            except ImportError:
+                logging.warn(
+                    "imgmaker failed to load Chrome: you will not be able to generate images."
+                )
 
     def generate(
         self,
         prompt: str = "",
         temperature: float = 0.7,
-        max_tokens: int = 128,
+        max_tokens: int = 32,
         model: str = "davinci",
     ):
 
-        data = {"prompt": prompt, "max_tokens": max_tokens, "temperature": temperature}
+        data = {
+            "prompt": prompt,
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "stream": True,
+        }
 
-        async with httpx.AsyncClient() as client:
-            r = await client.post(
-                f"https://api.openai.com/v1/engines/{model}/completions",
-                headers=self.headers,
-                data=data,
-                timeout=None,
-            )
-        r_json = r.json()
-        if "choices" not in r_json:
-            return ""
-        return r_json["choices"][0]["text"]
+        with httpx.stream(
+            "POST",
+            f"https://api.openai.com/v1/engines/{model}/completions",
+            headers=self.headers,
+            data=json.dumps(data),
+            timeout=None,
+        ) as r:
+            for chunk in r.iter_text():
+
+                text = chunk[6:]  # JSON chunks are prepended with "data: "
+                if "[DONE]" in text:
+                    return
+                print(json.loads(text)["choices"][0]["text"])

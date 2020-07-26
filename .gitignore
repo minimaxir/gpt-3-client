@@ -1,3 +1,6 @@
 img_output/
 txt_output/
 chromedriver
+.vscode
+.env
+*.pyc
