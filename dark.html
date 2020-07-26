@@ -19,7 +19,7 @@
     body {
       width: 450px;
       height: 600px;
-      display: flex;
+      /* display: flex; */
       font-family: 'Source Sans Pro', sans-serif !important;
     }
 
@@ -27,23 +27,23 @@
       /* margin-top: auto !important; */
       /* align-self: flex-end; */
       width: 100%;
+      height: 93vh;
       background-color: rgb(31, 36, 40) !important;
+      padding: 1.5rem 1.5rem !important;
     }
 
-    .level {
-      width: 100%;
+    footer {
       color: white !important;
+      height: 10vh;
       font-weight: 400;
-      background-color: {{ accent or 'rgb(0, 0, 0)'}};
+      font-size: 0.75em;
+      background-color: {{ accent or 'rgb(0, 0, 0)'}} !important;
+      padding: 1em !important;
     }
 
-    pre, span {
+    pre, span, strong {
       color: white !important;
       font-family: 'Source Sans Pro', sans-serif !important;
-    }
-
-    .brand {
-      font-size: 1.5em;
     }
 
     {{ custom_css or '' }}
@@ -55,6 +55,12 @@
         {{ html | safe }}
       </div>
     </section>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        {{ watermark | markdown }}
+      </div>
+    </footer>
   </body>
 
   <script type="text/javascript">
