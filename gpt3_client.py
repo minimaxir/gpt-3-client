@@ -7,8 +7,6 @@ from math import exp
 from rich.console import Console
 from rich.text import Text
 
-console = Console(record=True)
-
 logger = logging.getLogger("GPT3Client")
 logger.setLevel(logging.INFO)
 
@@ -50,6 +48,8 @@ class GPT3Client:
             "logprobs": 1,
         }
 
+        console = Console()
+        console.clear()
         gen_text = Text()
 
         gen_text.append(prompt, style="bold")
@@ -77,7 +77,13 @@ class GPT3Client:
                     else:
                         color = "red"
 
+                    console.clear()
                     gen_text.append(token, style=f"on {color}")
                     console.print(gen_text)
 
-        print(console.export_html())
+        console.clear()
+
+        # Create a new console to print and save the final generation.
+        console_final = Console(record=True)
+        console_final.print(gen_text)
+        console_final.save_html("test.html", inline_styles=True)
