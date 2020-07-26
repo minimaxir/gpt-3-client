@@ -72,7 +72,7 @@ class GPT3Client:
                 if len(text) < 10 and "[DONE]" in text:
                     break
 
-                # tokens is a list of 1-element dicts
+                temp_token = None
                 logprobs = json.loads(text)["choices"][0]["logprobs"]
                 tokens = logprobs["tokens"]
                 token_logprobs = logprobs["token_logprobs"]
@@ -80,11 +80,22 @@ class GPT3Client:
                     token = tokens[i]
                     log_prob = token_logprobs[i]
 
-                    console.clear()
-                    gen_text.append(
-                        token, style=f"on {self.derive_token_bg(log_prob, bg, accent)}"
-                    )
-                    console.print(gen_text)
+                    if token.startswith("bytes:"):
+                        # We need to hold the token to the next one
+                        # to get the full bytestring to decode
+
+                        # token = token[6:].encode("latin-1").decode()
+                        temp_token = token[6:]
+                    else:
+                        if temp_token:
+                            token = (token[6:] + temp_token).encode("latin-1").decode()
+                            temp_token = None
+                        console.clear()
+                        gen_text.append(
+                            token,
+                            style=f"on {self.derive_token_bg(log_prob, bg, accent)}",
+                        )
+                        console.print(gen_text)
 
         console.clear()
 
