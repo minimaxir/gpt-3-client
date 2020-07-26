@@ -4,6 +4,10 @@ import httpx
 import imgmaker
 import logging
 from math import exp
+from rich.console import Console
+from rich.text import Text
+
+console = Console(record=True)
 
 logger = logging.getLogger("GPT3Client")
 logger.setLevel(logging.INFO)
@@ -46,6 +50,11 @@ class GPT3Client:
             "logprobs": 1,
         }
 
+        gen_text = Text()
+
+        gen_text.append(prompt, style="bold")
+        console.print(gen_text)
+
         with httpx.stream(
             "POST",
             f"https://api.openai.com/v1/engines/{model}/completions",
@@ -56,10 +65,19 @@ class GPT3Client:
             for chunk in r.iter_text():
                 text = chunk[6:]  # JSON chunks are prepended with "data: "
                 if len(text) < 10 and "[DONE]" in text:
-                    return
+                    break
 
                 # tokens is a list of 1-element dicts
                 tokens = json.loads(text)["choices"][0]["logprobs"]["top_logprobs"]
                 for token_dict in tokens:
                     token, log_prob = list(token_dict.items())[0]
-                    print(f"{token}: {exp(log_prob)}")
+
+                    if exp(log_prob) > 0.5:
+                        color = "green"
+                    else:
+                        color = "red"
+
+                    gen_text.append(token, style=f"on {color}")
+                    console.print(gen_text)
+
+        print(console.export_html())
