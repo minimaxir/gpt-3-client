@@ -22,9 +22,7 @@ def gpt3_app(
     gpt3 = GPT3Client(image=image)
 
     if interactive:
-        prompt = Prompt.ask("Enter a prompt for the GPT-3 API")
-
-    print(divider)
+        prompt = Prompt.ask("[i]Enter a prompt for the GPT-3 API[/i]")
 
     gpt3.generate(
         prompt=prompt,
@@ -45,7 +43,6 @@ def gpt3_app(
             )
 
             if continue_gen:
-                print(divider)
 
                 gpt3.generate(
                     prompt=prompt,
