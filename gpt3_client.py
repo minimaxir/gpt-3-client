@@ -37,6 +37,7 @@ class GPT3Client:
         prompt: str = "",
         temperature: float = 0.7,
         max_tokens: int = 32,
+        stop: str = "",
         model: str = "davinci",
         bg: tuple = (31, 36, 40),
         accent: tuple = (0, 64, 0),
@@ -46,6 +47,7 @@ class GPT3Client:
             "prompt": prompt,
             "max_tokens": max_tokens,
             "temperature": temperature,
+            "stop": stop,
             "stream": True,
             "logprobs": 1,
         }
