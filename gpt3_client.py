@@ -6,7 +6,7 @@ import logging
 from math import exp
 from rich.console import Console
 from rich.text import Text
-from rich import print
+import hashlib
 import codecs
 
 logger = logging.getLogger("GPT3Client")
@@ -104,8 +104,19 @@ class GPT3Client:
                         )
                         console.print(text, end="")
 
-        console.line()
+        # Save the generated text to a plain-text file
+        # The file name will always be same for a given prompt and temperature
+        file_name = hashlib.sha256(bytes(prompt, "utf-8")).hexdigest()[0:8]
+        temp_string = str(temperature).replace(".", "_")
+
+        export_text = console.export_text()
+
+        with open(f"{file_name}__{temp_string}.txt", "a", encoding="utf-8") as f:
+            f.write(export_text + "\n" + "=" * 20 + "\n")
+
         console.save_html("test.html", inline_styles=True)
+
+        console.line()
 
     def derive_token_bg(self, log_prob: float, bg: tuple, accent: tuple):
         prob = exp(log_prob)
