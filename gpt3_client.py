@@ -3,6 +3,7 @@ import os
 import httpx
 import imgmaker
 import logging
+from math import exp
 
 logger = logging.getLogger("GPT3Client")
 logger.setLevel(logging.INFO)
@@ -42,6 +43,7 @@ class GPT3Client:
             "max_tokens": max_tokens,
             "temperature": temperature,
             "stream": True,
+            "logprobs": 1,
         }
 
         with httpx.stream(
@@ -52,8 +54,12 @@ class GPT3Client:
             timeout=None,
         ) as r:
             for chunk in r.iter_text():
-
                 text = chunk[6:]  # JSON chunks are prepended with "data: "
-                if "[DONE]" in text:
+                if len(text) < 10 and "[DONE]" in text:
                     return
-                print(json.loads(text)["choices"][0]["text"])
+
+                # tokens is a list of 1-element dicts
+                tokens = json.loads(text)["choices"][0]["logprobs"]["top_logprobs"]
+                for token_dict in tokens:
+                    token, log_prob = list(token_dict.items())[0]
+                    print(f"{token}: {exp(log_prob)}")
