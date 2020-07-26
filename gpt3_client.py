@@ -9,6 +9,7 @@ from rich.text import Text
 import hashlib
 import codecs
 from bs4 import BeautifulSoup
+import re
 
 logger = logging.getLogger("GPT3Client")
 logger.setLevel(logging.INFO)
@@ -106,10 +107,14 @@ class GPT3Client:
                         console.print(text, end="")
 
         # Export the saved text as HTML.
-        html = BeautifulSoup(
-            console.export_html(inline_styles=True), features="html.parser"
-        )
-        html_text = html.body.code
+        raw_html = self.replace_hex_colors(console.export_html(inline_styles=True))
+        html = BeautifulSoup(raw_html, features="html.parser")
+
+        html_text = html.body.code.pre
+
+        with open("test.html", "w", encoding="utf-8") as f:
+            f.write(raw_html)
+
         plain_text = html_text.text.strip()
 
         # Save the generated text to a plain-text file
@@ -133,3 +138,23 @@ class GPT3Client:
         )
 
         return f"rgb({min(color[0], 255)},{min(color[1], 255)},{min(color[2], 255)})"
+
+    def replace_hex_colors(self, html: str):
+        """
+        Headless Chrome requires inline styles to be
+        in rbg instead of hex format.
+        """
+
+        hex_colors = set(re.findall(r"(#.{6})\"", html))
+
+        for hex_color in hex_colors:
+            # https://stackoverflow.com/questions/29643352/converting-hex-to-rgb-value-in-python/29643643
+
+            h = hex_color.lstrip("#")
+            rgb = tuple(int(h[i : i + 2], 16) for i in (0, 2, 4))
+
+            rgb_str = f"rgb({rgb[0]},{rgb[1]},{rgb[2]})"
+
+            html = re.sub(hex_color, rgb_str, html)
+
+        return html
