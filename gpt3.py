@@ -11,7 +11,7 @@ def gpt3_app(
     prompt="Once upon a time",
     temperature: float = 0.0,
     max_tokens=32,
-    stop="",
+    stop: str = "",
     bg: tuple = (31, 36, 40),
     accent: tuple = (0, 64, 0),
     interactive=False,

@@ -57,6 +57,8 @@ class GPT3Client:
         include_coloring: bool = True,
     ):
 
+        assert isinstance(stop, str), "stop is not a str."
+
         data = {
             "prompt": prompt,
             "max_tokens": max_tokens,
@@ -92,6 +94,9 @@ class GPT3Client:
                 for i in range(len(tokens)):
                     token = tokens[i]
                     log_prob = token_logprobs[i]
+
+                    if token == stop:
+                        break
 
                     if token.startswith("bytes:") and not temp_token:
                         # We need to hold the 2-byte token to the next 1-byte token
