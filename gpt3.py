@@ -14,6 +14,7 @@ def gpt3_app(
     bg: tuple = (31, 36, 40),
     accent: tuple = (0, 64, 0),
     interactive=False,
+    pngquant=False,
 ):
 
     # divider_color_str = f"rgb({accent[0]},{accent[1]},{accent[2]})"
@@ -31,6 +32,7 @@ def gpt3_app(
         stop=stop,
         bg=bg,
         accent=accent,
+        pngquant=pngquant,
     )
 
     print(divider)

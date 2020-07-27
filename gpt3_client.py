@@ -50,6 +50,7 @@ class GPT3Client:
         model: str = "davinci",
         bg: tuple = (31, 36, 40),
         accent: tuple = (0, 64, 0),
+        pngquant: bool = False,
     ):
 
         data = {
@@ -139,6 +140,7 @@ class GPT3Client:
                 height=600,
                 downsample=False,
                 output_file=img_file_name,
+                use_pngquant=pngquant,
             )
 
         # Save the generated text to a plain-text file
