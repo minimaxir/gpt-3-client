@@ -116,7 +116,7 @@ class GPT3Client:
                             temp_token = None
                         text = Text(
                             token,
-                            style=f"on {self.derive_token_bg(log_prob, bg, accent)}",
+                            style=f"on {self.derive_token_bg(log_prob, bg, accent, include_coloring,)}",
                             end="\n" if token == "\n" else "",
                         )
                         console.print(text, end="")
@@ -143,9 +143,7 @@ class GPT3Client:
             self.imgmaker.generate(
                 "dark.html",
                 {
-                    "html": raw_html.replace("\n", "</br>")
-                    if include_coloring
-                    else plain_text,
+                    "html": raw_html.replace("\n", "</br>"),
                     "accent": f"rgb({accent[0]},{accent[1]},{accent[2]})",
                     "watermark": "Curated by **Max Woolf (@minimaxir)** "
                     + "— Generated using GPT-3 via OpenAI's API",
@@ -168,14 +166,19 @@ class GPT3Client:
 
         console.line()
 
-    def derive_token_bg(self, log_prob: float, bg: tuple, accent: tuple):
+    def derive_token_bg(
+        self, log_prob: float, bg: tuple, accent: tuple, include_coloring: bool
+    ):
         prob = exp(log_prob)
 
-        color = (
-            int(max(bg[0] + accent[0] * prob, bg[0])),
-            int(max(bg[1] + accent[1] * prob, bg[1])),
-            int(max(bg[2] + accent[2] * prob, bg[2])),
-        )
+        if include_coloring:
+            color = (
+                int(max(bg[0] + accent[0] * prob, bg[0])),
+                int(max(bg[1] + accent[1] * prob, bg[1])),
+                int(max(bg[2] + accent[2] * prob, bg[2])),
+            )
+        else:
+            color = bg
 
         return f"rgb({min(color[0], 255)},{min(color[1], 255)},{min(color[2], 255)})"
 
