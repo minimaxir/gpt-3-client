@@ -55,6 +55,8 @@ def gpt3_app(
 
                 print(divider)
 
+    gpt3.close()
+
 
 if __name__ == "__main__":
     fire.Fire(gpt3_app)

@@ -1,7 +1,7 @@
 import json
 import os
 import httpx
-import imgmaker
+from imgmaker import imgmaker
 import logging
 from math import exp
 from rich.console import Console
@@ -10,6 +10,7 @@ import hashlib
 import codecs
 from bs4 import BeautifulSoup
 import re
+from datetime import datetime
 
 logger = logging.getLogger("GPT3Client")
 logger.setLevel(logging.INFO)
@@ -35,6 +36,10 @@ class GPT3Client:
                 logging.warn(
                     "imgmaker failed to load Chrome: you will not be able to generate images."
                 )
+
+    def close(self):
+        if self.imgmaker:
+            self.imgmaker.close()
 
     def generate(
         self,
@@ -106,21 +111,39 @@ class GPT3Client:
                         )
                         console.print(text, end="")
 
-        # Export the saved text as HTML.
-        raw_html = self.replace_hex_colors(console.export_html(inline_styles=True))
+        # Export the generated text as HTML.
+        raw_html = self.replace_hex_colors(
+            console.export_html(inline_styles=True, code_format="{code}")
+        )
         html = BeautifulSoup(raw_html, features="html.parser")
 
-        html_text = html.body.code.pre
+        plain_text = html.text.strip()
 
-        with open("test.html", "w", encoding="utf-8") as f:
-            f.write(raw_html)
+        # Render the HTML as an image
+        prompt_hash = hashlib.sha256(bytes(prompt, "utf-8")).hexdigest()[0:8]
+        temp_string = str(temperature).replace(".", "_")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        plain_text = html_text.text.strip()
+        img_file_name = f"img_output/{timestamp}__{prompt_hash}__{temp_string}.png"
+
+        if self.imgmaker:
+            self.imgmaker.generate(
+                "dark.html",
+                {
+                    "html": raw_html.replace("\n", "</br>"),
+                    "accent": f"rgb({accent[0]},{accent[1]},{accent[2]})",
+                    "watermark": "Curated by **Max Woolf (@minimaxir)** "
+                    + "— Generated using GPT-3 via OpenAI's API",
+                },
+                width=450,
+                height=600,
+                downsample=False,
+                output_file=img_file_name,
+            )
 
         # Save the generated text to a plain-text file
         # The file name will always be same for a given prompt and temperature
-        prompt_hash = hashlib.sha256(bytes(prompt, "utf-8")).hexdigest()[0:8]
-        temp_string = str(temperature).replace(".", "_")
+
         txt_file_name = f"txt_output/{prompt_hash}__{temp_string}.txt"
 
         with open(txt_file_name, "a", encoding="utf-8") as f:
