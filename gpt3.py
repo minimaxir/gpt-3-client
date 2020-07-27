@@ -15,9 +15,10 @@ def gpt3_app(
     accent: tuple = (0, 64, 0),
     interactive=False,
     pngquant=False,
+    output_txt=None,
+    output_img=None,
 ):
 
-    # divider_color_str = f"rgb({accent[0]},{accent[1]},{accent[2]})"
     divider_color_str = "white"
     divider = Text("\n" + "-" * 10 + "\n\n", style=divider_color_str)
     gpt3 = GPT3Client(image=image)
@@ -33,6 +34,8 @@ def gpt3_app(
         bg=bg,
         accent=accent,
         pngquant=pngquant,
+        output_txt=output_txt,
+        output_img=output_img,
     )
 
     print(divider)
@@ -53,6 +56,9 @@ def gpt3_app(
                     stop=stop,
                     bg=bg,
                     accent=accent,
+                    pngquant=pngquant,
+                    output_txt=output_txt,
+                    output_img=output_img,
                 )
 
                 print(divider)

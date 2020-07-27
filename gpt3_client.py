@@ -51,6 +51,8 @@ class GPT3Client:
         bg: tuple = (31, 36, 40),
         accent: tuple = (0, 64, 0),
         pngquant: bool = False,
+        output_txt: str = None,
+        output_img: str = None,
     ):
 
         data = {
@@ -125,7 +127,10 @@ class GPT3Client:
         temp_string = str(temperature).replace(".", "_")
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        img_file_name = f"img_output/{timestamp}__{prompt_hash}__{temp_string}.png"
+        if output_img:
+            img_file_name = output_img
+        else:
+            img_file_name = f"img_output/{timestamp}__{prompt_hash}__{temp_string}.png"
 
         if self.imgmaker:
             self.imgmaker.generate(
@@ -144,9 +149,10 @@ class GPT3Client:
             )
 
         # Save the generated text to a plain-text file
-        # The file name will always be same for a given prompt and temperature
-
-        txt_file_name = f"txt_output/{prompt_hash}__{temp_string}.txt"
+        if output_txt:
+            txt_file_name = output_txt
+        else:
+            txt_file_name = f"txt_output/{prompt_hash}__{temp_string}.txt"
 
         with open(txt_file_name, "a", encoding="utf-8") as f:
             f.write(plain_text + "\n" + "=" * 20 + "\n")
