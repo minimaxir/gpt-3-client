@@ -53,6 +53,7 @@ class GPT3Client:
         pngquant: bool = False,
         output_txt: str = None,
         output_img: str = None,
+        include_prompt: bool = True,
     ):
 
         data = {
@@ -67,8 +68,9 @@ class GPT3Client:
         console = Console(record=True)
         console.clear()
 
-        prompt_text = Text(prompt, style="bold", end="")
-        console.print(prompt_text, end="")
+        if include_prompt:
+            prompt_text = Text(prompt, style="bold", end="")
+            console.print(prompt_text, end="")
 
         with httpx.stream(
             "POST",
@@ -78,7 +80,6 @@ class GPT3Client:
             timeout=None,
         ) as r:
             for chunk in r.iter_text():
-                # print(chunk)
                 text = chunk[6:]  # JSON chunks are prepended with "data: "
                 if len(text) < 10 and "[DONE]" in text:
                     break

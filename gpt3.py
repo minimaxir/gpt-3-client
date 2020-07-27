@@ -3,6 +3,7 @@ import fire
 from rich.prompt import Prompt, Confirm
 from rich import print
 from rich.text import Text
+import os
 
 
 def gpt3_app(
@@ -17,6 +18,7 @@ def gpt3_app(
     pngquant=False,
     output_txt=None,
     output_img=None,
+    include_prompt=True,
 ):
 
     divider_color_str = "white"
@@ -25,6 +27,13 @@ def gpt3_app(
 
     if interactive:
         prompt = Prompt.ask("[i]Enter a prompt for the GPT-3 API[/i]")
+
+    if os.path.exists(prompt):
+        with open(prompt, "r", encoding="utf-8") as f:
+            prompt = f.read()
+
+    # improves generation quality
+    prompt = prompt.rstrip()
 
     gpt3.generate(
         prompt=prompt,
@@ -36,6 +45,7 @@ def gpt3_app(
         pngquant=pngquant,
         output_txt=output_txt,
         output_img=output_img,
+        include_prompt=include_prompt,
     )
 
     print(divider)
@@ -59,6 +69,7 @@ def gpt3_app(
                     pngquant=pngquant,
                     output_txt=output_txt,
                     output_img=output_img,
+                    include_prompt=include_prompt,
                 )
 
                 print(divider)
