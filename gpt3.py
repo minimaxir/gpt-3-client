@@ -19,6 +19,7 @@ def gpt3_app(
     output_txt=None,
     output_img=None,
     include_prompt=True,
+    include_coloring=True,
 ):
 
     divider_color_str = "white"
@@ -32,9 +33,6 @@ def gpt3_app(
         with open(prompt, "r", encoding="utf-8") as f:
             prompt = f.read()
 
-    # improves generation quality
-    prompt = prompt.rstrip()
-
     gpt3.generate(
         prompt=prompt,
         temperature=temperature,
@@ -46,6 +44,7 @@ def gpt3_app(
         output_txt=output_txt,
         output_img=output_img,
         include_prompt=include_prompt,
+        include_coloring=include_coloring,
     )
 
     print(divider)
@@ -70,6 +69,7 @@ def gpt3_app(
                     output_txt=output_txt,
                     output_img=output_img,
                     include_prompt=include_prompt,
+                    include_coloring=include_coloring,
                 )
 
                 print(divider)

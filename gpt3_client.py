@@ -54,6 +54,7 @@ class GPT3Client:
         output_txt: str = None,
         output_img: str = None,
         include_prompt: bool = True,
+        include_coloring: bool = True,
     ):
 
         data = {
@@ -66,9 +67,9 @@ class GPT3Client:
         }
 
         console = Console(record=True)
-        console.clear()
 
         if include_prompt:
+            console.clear()
             prompt_text = Text(prompt, style="bold", end="")
             console.print(prompt_text, end="")
 
@@ -137,7 +138,9 @@ class GPT3Client:
             self.imgmaker.generate(
                 "dark.html",
                 {
-                    "html": raw_html.replace("\n", "</br>"),
+                    "html": raw_html.replace("\n", "</br>")
+                    if include_coloring
+                    else plain_text,
                     "accent": f"rgb({accent[0]},{accent[1]},{accent[2]})",
                     "watermark": "Curated by **Max Woolf (@minimaxir)** "
                     + "— Generated using GPT-3 via OpenAI's API",
