@@ -118,7 +118,7 @@ class GPT3Client:
                         text = Text(
                             token,
                             style=f"on {self.derive_token_bg(log_prob, bg, accent, include_coloring,)}",
-                            end="\n" if token == "\n" else "",
+                            end="",
                         )
                         console.print(text, end="")
 
