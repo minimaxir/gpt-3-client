@@ -4,3 +4,7 @@ chromedriver
 .vscode
 .env
 *.pyc
+test*
+img.png
+text.txt
+prompt.txt
