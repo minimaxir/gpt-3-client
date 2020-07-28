@@ -95,7 +95,7 @@ class GPT3Client:
                     token = tokens[i]
                     log_prob = token_logprobs[i]
 
-                    if token == stop:
+                    if token == stop or token == "<|endoftext|>":
                         break
 
                     if token.startswith("bytes:") and not temp_token:
@@ -105,6 +105,7 @@ class GPT3Client:
                         # The API-returned tokens are in the form:
                         # "bytes:\xe2\x80" and "bytes:\x9d"
                         temp_token = token[6:]
+                        temp_prob = log_prob
                     else:
                         if temp_token:
                             bytestring = temp_token + token[6:]
@@ -114,6 +115,7 @@ class GPT3Client:
                                 "utf-8"
                             )
                             temp_token = None
+                            log_prob = temp_prob  # the true prob is the first one
                         text = Text(
                             token,
                             style=f"on {self.derive_token_bg(log_prob, bg, accent, include_coloring,)}",
