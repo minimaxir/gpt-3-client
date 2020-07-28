@@ -8,7 +8,6 @@ from rich.console import Console
 from rich.text import Text
 import hashlib
 import codecs
-from bs4 import BeautifulSoup
 import re
 from datetime import datetime
 
@@ -125,11 +124,8 @@ class GPT3Client:
 
         # Export the generated text as HTML.
         raw_html = self.replace_hex_colors(
-            console.export_html(inline_styles=True, code_format="{code}")
+            console.export_html(inline_styles=True, code_format="{code}", clear=False)
         )
-        html = BeautifulSoup(raw_html, features="html.parser")
-
-        plain_text = html.text.strip()
 
         # Render the HTML as an image
         prompt_hash = hashlib.sha256(bytes(prompt, "utf-8")).hexdigest()[0:8]
@@ -164,7 +160,7 @@ class GPT3Client:
             txt_file_name = f"txt_output/{prompt_hash}__{temp_string}.txt"
 
         with open(txt_file_name, "a", encoding="utf-8") as f:
-            f.write(plain_text + "\n" + "=" * 20 + "\n")
+            f.write(console.export_text() + "\n" + "=" * 20 + "\n")
 
         console.line()
 
