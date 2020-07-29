@@ -3,6 +3,7 @@ import fire
 from rich.prompt import Prompt, Confirm
 from rich import print
 from rich.text import Text
+from json import JSONDecodeError
 import os
 
 
@@ -23,7 +24,7 @@ def gpt3_app(
 ):
 
     divider_color_str = "white"
-    divider = Text("\n" + "-" * 10 + "\n\n", style=divider_color_str)
+    divider = Text("-" * 10 + "\n", style=divider_color_str)
     gpt3 = GPT3Client(image=image)
 
     if interactive:
@@ -33,48 +34,57 @@ def gpt3_app(
         with open(prompt, "r", encoding="utf-8") as f:
             prompt = f.read()
 
-    gpt3.generate(
-        prompt=prompt,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        stop=stop,
-        bg=bg,
-        accent=accent,
-        pngquant=pngquant,
-        output_txt=output_txt,
-        output_img=output_img,
-        include_prompt=include_prompt,
-        include_coloring=include_coloring,
-    )
+    try:
+        gpt3.generate(
+            prompt=prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            stop=stop,
+            bg=bg,
+            accent=accent,
+            pngquant=pngquant,
+            output_txt=output_txt,
+            output_img=output_img,
+            include_prompt=include_prompt,
+            include_coloring=include_coloring,
+        )
 
-    print(divider)
+        print(divider)
 
-    if interactive:
-        continue_gen = True
-        while continue_gen:
-            continue_gen = Confirm.ask(
-                "[i]Do you wish to continue generating from the same prompt?[/i]"
-            )
-
-            if continue_gen:
-
-                gpt3.generate(
-                    prompt=prompt,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    stop=stop,
-                    bg=bg,
-                    accent=accent,
-                    pngquant=pngquant,
-                    output_txt=output_txt,
-                    output_img=output_img,
-                    include_prompt=include_prompt,
-                    include_coloring=include_coloring,
+        if interactive:
+            continue_gen = True
+            while continue_gen:
+                continue_gen = Confirm.ask(
+                    "[i]Do you wish to continue generating from the same prompt?[/i]"
                 )
 
-                print(divider)
+                if continue_gen:
 
-    gpt3.close()
+                    gpt3.generate(
+                        prompt=prompt,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        stop=stop,
+                        bg=bg,
+                        accent=accent,
+                        pngquant=pngquant,
+                        output_txt=output_txt,
+                        output_img=output_img,
+                        include_prompt=include_prompt,
+                        include_coloring=include_coloring,
+                    )
+
+                    print(divider)
+
+    except KeyboardInterrupt:
+        print("\n\n[red italic]Generation interrupted![/]")
+    except JSONDecodeError:
+        print("\n\n[red italic]The JSON from the API was misparsed![/]")
+
+    try:
+        gpt3.close()
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":
