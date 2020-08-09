@@ -10,7 +10,7 @@ import os
 def gpt3_app(
     image=False,
     prompt="Once upon a time",
-    temperature: float = 0.0,
+    temperature: float = 0.7,
     max_tokens=32,
     stop: str = "",
     bg: tuple = (31, 36, 40),

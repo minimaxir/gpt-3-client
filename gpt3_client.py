@@ -136,6 +136,8 @@ class GPT3Client:
         if output_img:
             img_file_name = output_img
         else:
+            if not os.path.exists("img_output"):
+                os.makedirs("img_output")
             img_file_name = f"img_output/{timestamp}__{prompt_hash}__{temp_string}.png"
 
         if self.imgmaker:
@@ -157,6 +159,8 @@ class GPT3Client:
         if output_txt:
             txt_file_name = output_txt
         else:
+            if not os.path.exists("txt_output"):
+                os.makedirs("txt_output")
             txt_file_name = f"txt_output/{prompt_hash}__{temp_string}.txt"
 
         with open(txt_file_name, "a", encoding="utf-8") as f:
