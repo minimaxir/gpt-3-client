@@ -47,6 +47,14 @@ python3 gpt3.py
 
 The generation output will be stored in a text file in the `txt_output` folder, corresponding to a hash of the prompt and the temperature (e.g. `e286222c__0_7.txt`)
 
+Passing `--image` will render the output into a social-media sharable image.
+
+```sh
+python3 gpt3.py --image --max_tokens 256 --include_coloring True
+```
+
+![](demo_output.png)
+
 By default, it will generate from the prompt "Once upon a time". To specify a custom prompt, you can do:
 
 ```sh
