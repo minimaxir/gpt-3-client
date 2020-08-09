@@ -1,6 +1,8 @@
 # gpt-3-client
 
-A client for OpenAI's GPT-3 API, intended to be used for more _ad hoc_ testing of prompt without using the web interface. This approach allows more customization of th
+[![](demo.png)](https://www.youtube.com/watch?v=kvgWeaRCuls)
+
+A client for OpenAI's GPT-3 API, intended to be used for more _ad hoc_ testing of prompt without using the web interface. This approach allows more customization of the resulting output, ideal for [livestreaming](https://www.youtube.com/watch?v=kvgWeaRCuls) organic, non-cherry-picked outputs.
 
 In addition to generating text via the API, the client:
 
