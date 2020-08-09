@@ -54,6 +54,7 @@ class GPT3Client:
         output_img: str = None,
         include_prompt: bool = True,
         include_coloring: bool = True,
+        watermark: str = "Generated using GPT-3 via OpenAI's API",
     ):
 
         assert isinstance(stop, str), "stop is not a str."
@@ -143,8 +144,7 @@ class GPT3Client:
                 {
                     "html": raw_html.replace("\n", "</br>"),
                     "accent": f"rgb({accent[0]},{accent[1]},{accent[2]})",
-                    "watermark": "Curated by **Max Woolf (@minimaxir)** "
-                    + "— Generated using GPT-3 via OpenAI's API",
+                    "watermark": watermark,
                 },
                 width=450,
                 height=600,

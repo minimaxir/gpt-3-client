@@ -21,11 +21,8 @@ def gpt3_app(
     output_img=None,
     include_prompt=True,
     include_coloring=True,
+    watermark="Generated using GPT-3 via OpenAI's API",
 ):
-
-    divider_color_str = "white"
-    divider = Text("-" * 10 + "\n", style=divider_color_str)
-    gpt3 = GPT3Client(image=image)
 
     if interactive:
         prompt = Prompt.ask("[i]Enter a prompt for the GPT-3 API[/i]")
@@ -33,6 +30,10 @@ def gpt3_app(
     if os.path.exists(prompt):
         with open(prompt, "r", encoding="utf-8") as f:
             prompt = f.read()
+
+    divider_color_str = "white"
+    divider = Text("-" * 10 + "\n", style=divider_color_str)
+    gpt3 = GPT3Client(image=image)
 
     try:
         gpt3.generate(
@@ -47,6 +48,7 @@ def gpt3_app(
             output_img=output_img,
             include_prompt=include_prompt,
             include_coloring=include_coloring,
+            watermark=watermark,
         )
 
         print(divider)
@@ -72,6 +74,7 @@ def gpt3_app(
                         output_img=output_img,
                         include_prompt=include_prompt,
                         include_coloring=include_coloring,
+                        watermark=watermark,
                     )
 
                     print(divider)
