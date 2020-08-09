@@ -51,11 +51,28 @@ By default, it will generate from the prompt "Once upon a time". To specify a cu
 python3 gpt3.py --prompt "I am a pony"
 ```
 
-For longer prompts, you can put the prompt in a `prompt.txt` filee instead:
+For longer prompts, you can put the prompt in a `prompt.txt` file instead:
 
 ```sh
-python3 gpt3.py --prompt "prompt.txt"
+python3 gpt3.py --prompt "prompt.txt" --max_tokens 256
 ```
+
+## CLI Arguments
+
+- `image`: Whether to render an image of the generated text (requires imgmaker) _[Default: False]_
+- `prompt`: Prompt for GPT-3; either text or a path to a file. _[Default: "Once upon a time"]_
+- `temperature`: Generation creativity; the higher, the crazier. _[Default: 0.7]_
+- `max_tokens`: Number of tokens generated _[Default: 0.7]_
+- `stop`: Token to use to stop generation. _[Default: ""]_
+- `bg`: RGB tuple representing the base for coloration: you should set to the background of the terminal. _[Default: (31, 36, 40)]_
+- `accent`: Accent color to blend with the `bg` to indicate prediction strength. _[Default: (0, 64, 0)]_
+- `interactive`: Enters an "interactive" mode where you can provide prompts repeatedly. _[Default: False]_
+- `pngquant`: If using `image`, uses pngquant to massively compress it. Requires pngquant installed on your system. _[Default: False]_
+- `output_txt`: Specify output text file, overriding default behavior if not None. _[Default: None]_
+- `output_img`: Specify output image file, overriding default behavior if not None. _[Default: None]_
+- `include_prompt`: Include prompt in the generation output. _[Default: False]_
+- `include_coloring`: Use probability coloring _[Default: True]_
+- `watermark`: Specify watermark text on the generated image. Supports Markdown formatting. _[Default: "Generated using GPT-3 via OpenAI's API"]_
 
 ## Maintainer/Creator
 
