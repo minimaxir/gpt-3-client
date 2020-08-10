@@ -2,7 +2,7 @@
 
 [![](demo.png)](https://www.youtube.com/watch?v=kvgWeaRCuls)
 
-A client for OpenAI's GPT-3 API, intended to be used for more _ad hoc_ testing of prompt without using the web interface. This approach allows more customization of the resulting output, ideal for [livestreaming](https://www.youtube.com/watch?v=kvgWeaRCuls) organic, non-cherry-picked outputs.
+A client for OpenAI's GPT-3 API, intended to be used for more _ad hoc_ testing of prompts without using the web interface. This approach allows more customization of the resulting output, ideal for [livestreaming](https://www.youtube.com/watch?v=kvgWeaRCuls) organic, non-cherry-picked outputs.
 
 In addition to generating text via the API, the client:
 
@@ -23,7 +23,7 @@ pip3 install httpx rich imgmaker
 
 Then download this repostory and `cd` into the downloaded folder.
 
-Optionally, if you want to generate images of the generated text, you'll also need to have the latest version of Chrome install and download the corresponding chromedriver:
+Optionally, if you want to generate images of the generated text, you'll also need to have the latest version of Chrome installed and download the corresponding chromedriver (see the [imgmaker repo](https://github.com/minimaxir/imgmaker) for more information):
 
 ```sh
 imgmaker chromedriver
