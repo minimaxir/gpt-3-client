@@ -6,10 +6,10 @@ A client for OpenAI's GPT-3 API, intended to be used for more _ad hoc_ testing o
 
 In addition to generating text via the API, the client:
 
-- Prints the generated text to console, with a **bolded** prompt.
-  - Allows for coloring the text by prediction quality
+- Streams text generation as soon as it's generated (via [httpx](https://github.com/encode/httpx))
+- Prints the generated text to console, with a **bolded** prompt and coloring the text by prediction quality (via [rich](https://github.com/willmcgugan/rich))
 - Automatically saves each generated text to a file
-- Automatically creates a sharable, social-media-optimized image using imgmaker.
+- Automatically creates a sharable, social-media-optimized image (using [imgmaker](https://github.com/minimaxir/imgmaker)).
 
 NB: This project is intended more for personal use, and as a result may not be as actively supported as my other projects intended for productionization.
 
